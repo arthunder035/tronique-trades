@@ -3,7 +3,7 @@ from flask import Flask, jsonify, Response, request
 from flask_cors import CORS
 import pandas as pd
 import os
-from dependencies.vanna import VannaDefault
+from vanna.remote import VannaDefault
 import sys
 
 load_dotenv()
@@ -12,21 +12,13 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # VANNA INITIALIZATION
 vannakey = os.environ.get("VANNA_API_KEY")
-account = os.environ.get("SNOWFLAKE_ACCOUNT")
-username = os.environ.get("SNOWFLAKE_USERNAME")
-password = os.environ.get("SNOWFLAKE_PASSWORD")
-database = os.environ.get("SNOWFLAKE_DATABASE")
-role = os.environ.get("SNOWFLAKE_ROLE")
 model = os.environ.get("VANNA_MODEL")
 vn = VannaDefault(model=model, api_key=vannakey)
-vn.connect_to_snowflake(
-    account=account, username=username, password=password, database=database, role=role
-)
+vn.connect_to_sqlite('D:/Vanna Demo/TronData')
 
 
 @app.route("/api/v1/generate_questions", methods=["GET"])
 def generate_questions():
-    print({database})
     return jsonify(
         {
             "type": "question_list",
