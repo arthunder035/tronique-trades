@@ -148,7 +148,9 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
         <div className={`flex items-center`}>
           <input
             type="text"
-            className="input m-2 w-full bg-transparent border-none outline-none text-[#848484]"
+            className={`input m-2 w-full bg-transparent border-none outline-none ${
+              message.trim() ? 'text-white' : 'text-[#848484]'
+            }`}
             placeholder="Enter a prompt here"
             value={message}
             onChange={handleInputChange}

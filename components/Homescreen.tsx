@@ -54,14 +54,14 @@ const Homescreen = (props: HomescreenProps) => {
         {!loading &&
           questions?.questions?.slice(0, 4).map((ques: string) => {
             return (
-              <div key={uuidv4()} className="border border-1 rounded-lg p-7 m-3 question-div text-white flex flex-col justify-between items-center">
-                <p className="text-[1.2vw]">{ques}</p>
+              <div key={uuidv4()} className="question-div border border-1 rounded-md py-3 px-4 m-3 text-white flex flex-col justify-between items-center">
+                <p className="text-[1vw]">{ques}</p>
                 <button
                 className="chat-button"
                 key={uuidv4()}
                 onClick={() => handleSelectQuestion(ques)}
               >
-                <HiOutlineArrowCircleUp className="text-[2.8vw]"/>
+                <HiOutlineArrowCircleUp className="text-[2.8vw] pt-4"/>
               </button>
               </div>
             );

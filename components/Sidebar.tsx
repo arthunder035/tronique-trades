@@ -1,3 +1,4 @@
+
 import { useRoot } from "@/context/ContextProvider";
 import React from "react";
 import { MdOutlineMenu } from "react-icons/md";
@@ -8,6 +9,7 @@ import { HiCog } from "react-icons/hi";
 import { FaClockRotateLeft } from "react-icons/fa6";
 import icon from "../public/icon.svg"
 import Image from "next/image";
+import logo from "../public/logo.png"
 
 export default function Sidebar() {
   const { showSideBar, handleShowSideBar } = useRoot();
@@ -18,6 +20,11 @@ export default function Sidebar() {
   return (
     <div className={`min-h-screen flex flex-col justify-center bg-[#1F1F1F]
     ${showSideBar ? "w-[300px]" : "w-28"}`}>
+
+      <div className="flex justify-center items-center">
+
+      <Image src={logo} alt="logo" className={`${showSideBar ? " ml-5 w-[120px] h-auto" : "hidden"}`}></Image>
+
 
       <div className={`${showSideBar ? "flex flex-row-reverse justify-center ml-auto" : "flex flex-col justify-center items-center"}`}>
       {showSideBar ? (
@@ -40,6 +47,7 @@ export default function Sidebar() {
           className="my-5">
           <RiChatNewFill className="text-white rounded-lg text-3xl text-center"/>
       </button>
+      </div>
       </div>
 
       <div className="flex justify-center items-center flex-col">
