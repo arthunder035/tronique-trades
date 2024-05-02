@@ -16,7 +16,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props: ChatBubbleProps) => {
         <Avatar className="avatar" path={logo} alt={alt} />
         <p className="mx-2 font-bold text-base text-gray-500">{title}</p>
       </div>
-      <div className="flex flex-col space-y-2 text-xs ml-10 mr-2 my-2 max-w-[70rem] min-w-[20rem] overflow-x-scroll rounded-lg">
+      <div className="flex flex-col space-y-2 text-xs ml-10 mr-2 my-2 max-w-[80rem] min-w-[20rem] overflow-x-wrap rounded-lg">
         {child}
       </div>
     </div>

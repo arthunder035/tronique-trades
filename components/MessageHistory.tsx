@@ -9,6 +9,8 @@ import { useRoot } from "@/context/ContextProvider";
 import ChatButtons from "./ChatButtons";
 import useChatScroll from "./ChatScroll";
 import CodeContainer from "./CodeContainer";
+import "../styles/chatscreen.css"
+
 
 type MessageHistoryProps = {
   runSQL: (sql: string) => Promise<RUNResponse>;
@@ -90,7 +92,7 @@ const MessageHistory = (props: MessageHistoryProps) => {
     if (mode === MODES.edit) {
       return (
         <textarea
-          className="flex p-6 text-white bg-gray-800 w-[50vw] min-h-48 font-base text-sm rounded"
+          className="flex p-6 text-white bg-gray-800 w-[50vw] min-h-48 font-base text-sm rounded "
           defaultValue={val.ai}
           onChange={handleChangeSQL}
         />
@@ -113,13 +115,13 @@ const MessageHistory = (props: MessageHistoryProps) => {
   };
 
   return (
-    <div ref={chatRef} className="p-2 m-4 max-h-[80vh] overflow-y-scroll">
+    <div ref={chatRef} className="m-0 p-0 text-white w-full h-[85%] overflow-y-scroll">
       {messageHistory?.map((val, ix) => (
-        <div key={val?.messageId}>
+        <div key={val?.messageId} className="mx-8 my-8 overflow-hidden">
           {val?.ai && (
             <div className="flex flex-col items-start justify-center">
               <ChatBubble
-                title="Vanna"
+                title="Tronique"
                 logo={"/assets/vanna_circle.png"}
                 alt="red"
                 child={renderChild(val, ix)}
