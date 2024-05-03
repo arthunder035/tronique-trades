@@ -10,6 +10,7 @@ import ChatButtons from "./ChatButtons";
 import useChatScroll from "./ChatScroll";
 import CodeContainer from "./CodeContainer";
 import "../styles/chatscreen.css"
+import icon from "../public/icon.svg"
 
 
 type MessageHistoryProps = {
@@ -102,7 +103,13 @@ const MessageHistory = (props: MessageHistoryProps) => {
       if (Array.isArray(data) && data.length === 0) {
         return <p className="font-bold text-xs">Relevant data not found!</p>;
       } else {
-        return <Table data={data} />;
+        return (
+          <div>
+            <p>this is your response.</p>
+            <Table data={data} />
+            
+          </div>
+        );
       }
     } else if (val.type === MESSAGE_TYPES.sql) {
       return <CodeContainer language="sql">{val.ai}</CodeContainer>;
@@ -122,7 +129,7 @@ const MessageHistory = (props: MessageHistoryProps) => {
             <div className="flex flex-col items-start justify-center">
               <ChatBubble
                 title="Tronique"
-                logo={"/assets/vanna_circle.png"}
+                logo={icon}
                 alt="red"
                 child={renderChild(val, ix)}
               />

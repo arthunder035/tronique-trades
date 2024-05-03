@@ -25,8 +25,8 @@
     background: #45353545;
     border: 0.5px solid linear-gradient(89.9deg, #FB5C78 0.16%, #F7D5CC 29.77%) ;
     border-image-slice: 1;
-    /* width: 300px;  */
-    /* height:200px; */
+    width: 300px; 
+    height:200px;
 }
 
 ::-webkit-scrollbar {

@@ -38,6 +38,7 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
   const [disabled, setDisabled] = useState(message.length === 0);
   const [loading, setLoading] = useState(true);
   const [generatedQuestions, setGeneratedQuestions] = useState({});
+  
 
   useLayoutEffect(() => {
     let isMounted = true; // Flag to track component's mounting status
@@ -165,7 +166,7 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
                 : "border-white bg-white"
             }`}
           >
-            <BiSend size={20} onClick={handleSend} className="text-red-700" />
+            <BiSend size={20} onClick={handleSend} className="text-[#DE082D]" />
           </button>
         </div>
       </div>

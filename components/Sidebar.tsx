@@ -1,4 +1,3 @@
-
 import { useRoot } from "@/context/ContextProvider";
 import React from "react";
 import { MdOutlineMenu } from "react-icons/md";
@@ -10,6 +9,8 @@ import { FaClockRotateLeft } from "react-icons/fa6";
 import icon from "../public/icon.svg"
 import Image from "next/image";
 import logo from "../public/logo.png"
+import { Link } from 'react-router-dom'
+
 
 export default function Sidebar() {
   const { showSideBar, handleShowSideBar } = useRoot();
@@ -17,9 +18,10 @@ export default function Sidebar() {
     handleShowSideBar(!showSideBar);
   };
 
+
   return (
     <div className={`min-h-screen flex flex-col justify-center bg-[#1F1F1F]
-    ${showSideBar ? "w-[300px]" : "w-28"}`}>
+    ${showSideBar ? "w-[300px]" : "w-[200px]"}`}>
 
       <div className="flex justify-center items-center">
 
@@ -43,25 +45,25 @@ export default function Sidebar() {
         </button>
       )}
 
-      <button
-          className="my-5">
+      <button 
+          className="my-5" >
           <RiChatNewFill className="text-white rounded-lg text-3xl text-center"/>
       </button>
       </div>
       </div>
 
-      <div className="flex justify-center items-center flex-col">
+      <div className="flex justify-center items-center flex-col w-full">
       <button
           className="p-2 my-0 mx-auto w-[100%]">
-          <HiPlusSm className={`hover:bg-white border transition-colors text-purple-600 rounded-lg text-3xl text-center mx-auto ${showSideBar ? "w-[80%]" : "w-[35%]"}`} />
+          <p className={`hover:bg-white border transition-colors text-[#DE082D] rounded-lg text-[14px] text-center mx-auto ${showSideBar ? "w-[80%]" : "w-[100%]"}`}>Forum Data</p>
       </button>
       <button
           className="p-2 my-0 mx-2 w-[100%]">
-          <HiPlusSm className={`hover:bg-white border text-purple-600 rounded-lg text-3xl text-center mx-auto ${showSideBar ? "w-[80%]" : "w-[35%]"}`} />
+          <p className={`hover:bg-white border text-[#DE082D] rounded-lg text-[14px] text-center mx-auto ${showSideBar ? "w-[80%]" : "w-[100%]"}`}>Dex Trade Data</p>
       </button>
-      <button
+      <button 
           className="p-2 my-0 mx-2 w-[100%]">
-          <HiPlusSm className={`hover:bg-white border text-purple-600 rounded-lg text-3xl text-center mx-auto ${showSideBar ? "w-[80%]" : "w-[35%]"}`} />
+          <p className={`hover:bg-white border text-[#DE082D] rounded-lg text-[14px] text-center mx-auto ${showSideBar ? "w-[80%]" : "w-[100%]"}`}>Documentation Data</p>
       </button>
       </div>
 
