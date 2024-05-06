@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Vanna AI",
-  description: "Talk to your SQL",
+  title: "DexTrade | TroniQue",
+  description: "",
 };
 
 export default function RootLayout({

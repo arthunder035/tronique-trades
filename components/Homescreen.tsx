@@ -18,10 +18,10 @@ const Homescreen = (props: HomescreenProps) => {
   const { handleChangeMessageHistory } = useRoot();
 
   const fixedQuestions = [
-    "How many views did the JustMoney project receive in each season?",
-    "Which are the trending projects in season 5?",
-    "List all users who have posted more than 10 times on a single topic in season 5.",
-    "Top 10 users who have engaged the most in season 4.",
+    "What are the month wise total unique transactions?",
+    "What are percentage of total unique transactions for 10 smart contract?",
+    "Give the hourly total unique transactions of April based on block time",
+    "What are the daily total trades?",
   ];
 
   const handleSelectQuestion = async (value: string) => {
@@ -53,7 +53,7 @@ const Homescreen = (props: HomescreenProps) => {
   return (
     <div className="m-auto flex flex-col w-full h-[100vh] items-center justify-center">
       <div className="flex w-[80%] h-auto flex-col items-start m-3">
-        <h3 className="hello-text">Hello, John</h3>
+        <h3 className="hello-text">Hello,</h3>
         <p className="text-[white] paragraph">How can I help you today?</p>
       </div>
       <div className="flex flex-row justify-start items-start max-h-[40vh] w-[80%]">

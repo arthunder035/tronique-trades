@@ -114,7 +114,7 @@ export default function Sidebar() {
               aria-expanded={showDropdown ? "true" : "false"}
               aria-haspopup="true"
             >
-              {showSideBar && (selectedOption || "Forum Data")}{" "}
+              {showSideBar && (selectedOption || "DexTrade Data")}{" "}
               <FaCaretRight className={`${showSideBar && "ml-3"}`} />
             </button>
           </div>
@@ -129,19 +129,20 @@ export default function Sidebar() {
               <div className="py-1" role="none">
                 {/* Options */}
                 <button
-                  // onClick={() => handleOptionSelect("Forum Data")}
-                  className="block w-full px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem"
-                >
-                  Forum Data
-                </button>
-                <button
-                  onClick={() => handleOptionSelect("DexTrade Data")}
+                  // onClick={() => handleOptionSelect("DexTrade Data")}
                   className="block w-full px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-gray-900"
                   role="menuitem"
                 >
                   DexTrade Data
                 </button>
+                <button
+                  onClick={() => handleOptionSelect("Forum Data")}
+                  className="block w-full px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                >
+                  Forum Data
+                </button>
+                
                 <button
                   // onClick={() => handleOptionSelect("Documentation Data")}
                   onClick={() => {

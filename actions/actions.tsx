@@ -36,7 +36,7 @@ export async function generateQuestions() {
 
 export async function generateSQL(question: string) {
   const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/forum/generate_and_run_sql`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/trades/generate_and_run_sql`,
     {
       params: { question },
       headers: {
@@ -52,7 +52,7 @@ export async function generateSQL(question: string) {
 
 export async function runSQL(question: string) {
   const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/forum/generate_plotly_figure`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/trades/generate_plotly_figure`,
     {
       params: { question },
       headers: {
@@ -68,7 +68,7 @@ export async function runSQL(question: string) {
 
 export async function generateAndRunSQLForum(question: string) {
   const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/forum/generate_and_run_sql`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/trades/generate_and_run_sql`,
     {
       params: { question },
       headers: {
@@ -84,7 +84,7 @@ export async function generateAndRunSQLForum(question: string) {
 
 export async function generatePlotlyFigureForum(question: string) {
   const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/forum/generate_plotly_figure`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/trades/generate_plotly_figure`,
     {
       params: { question },
       headers: {

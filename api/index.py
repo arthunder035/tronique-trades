@@ -19,10 +19,10 @@ def initialize_vanna(model_env_var, key_env_var, sqlite_path):
     return vn
 
 # Initialize Vanna for trades
-vn_trades = initialize_vanna("VANNA_MODEL_TRADES", "VANNA_API_KEY_TRADES", 'D:/tronique-new/database/tron')
+vn_trades = initialize_vanna("VANNA_MODEL_TRADES", "VANNA_API_KEY_TRADES", './database/TronTradesData')
 
 # Initialize Vanna for forum
-vn_forum = initialize_vanna("VANNA_MODEL_FORUM", "VANNA_API_KEY_FORUM", 'D:/tronique-new/database/TronForumData')
+vn_forum = initialize_vanna("VANNA_MODEL_FORUM", "VANNA_API_KEY_FORUM", './database/TronTradesData')
 
 @app.route("/api/v1/trades/generate_questions", methods=["GET"])
 def generate_trades_questions():
