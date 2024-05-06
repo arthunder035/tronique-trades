@@ -4,9 +4,8 @@ import { SQLResponse, TMessage, TQuestions } from "@/helpers/types";
 import { v4 as uuidv4 } from "uuid";
 import { MESSAGE_TYPES } from "@/helpers/enums";
 import { useRoot } from "@/context/ContextProvider";
-import "../styles/chatscreen.css"
+import "../styles/chatscreen.css";
 import { HiOutlineArrowCircleUp } from "react-icons/hi";
-
 
 type HomescreenProps = {
   questions: TQuestions;
@@ -17,6 +16,13 @@ const Homescreen = (props: HomescreenProps) => {
   const { questions, generateSQL, loading } = props;
 
   const { handleChangeMessageHistory } = useRoot();
+
+  const fixedQuestions = [
+    "How many views did the JustMoney project receive in each season?",
+    "Which are the trending projects in season 5?",
+    "List all users who have posted more than 10 times on a single topic in season 5.",
+    "Top 10 users who have engaged the most in season 4.",
+  ];
 
   const handleSelectQuestion = async (value: string) => {
     try {
@@ -50,19 +56,22 @@ const Homescreen = (props: HomescreenProps) => {
         <h3 className="hello-text">Hello, John</h3>
         <p className="text-[white] paragraph">How can I help you today?</p>
       </div>
-      <div className="flex flex-row justify-start items-start max-h-[54vh] w-[80%]">
+      <div className="flex flex-row justify-start items-start max-h-[40vh] w-[80%]">
         {!loading &&
-          questions?.questions?.slice(0, 4).map((ques: string) => {
+          fixedQuestions.map((ques: string) => {
             return (
-              <div key={uuidv4()} className="question-div border border-1 rounded-md py-3 px-4 m-3 text-white flex flex-col justify-between items-center">
-                <p className="text-[1vw]">{ques}</p>
-                <button
-                className="chat-button"
+              <div
                 key={uuidv4()}
-                onClick={() => handleSelectQuestion(ques)}
+                className="question-div border border-1 rounded-md py-3 px-4 m-3 text-white flex flex-col justify-between items-center max-h-[140px]"
               >
-                <HiOutlineArrowCircleUp className="text-[2.8vw] pt-4"/>
-              </button>
+                <p className="text-[1vw]">{ques}</p>
+                {/* <button
+                  className="chat-button"
+                  key={uuidv4()}
+                  onClick={() => handleSelectQuestion(ques)}
+                >
+                  <HiOutlineArrowCircleUp className="text-[2.8vw] pt-4" />
+                </button> */}
               </div>
             );
           })}

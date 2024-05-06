@@ -11,101 +11,122 @@ app = Flask(__name__, static_url_path="")
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # VANNA INITIALIZATION
-vannakey = os.environ.get("VANNA_API_KEY")
-model = os.environ.get("VANNA_MODEL")
-vn = VannaDefault(model=model, api_key=vannakey)
-vn.connect_to_sqlite('D:/Vanna Demo/TronData')
+def initialize_vanna(model_env_var, key_env_var, sqlite_path):
+    vanna_key = os.environ.get(key_env_var)
+    model = os.environ.get(model_env_var)
+    vn = VannaDefault(model=model, api_key=vanna_key)
+    vn.connect_to_sqlite(sqlite_path)
+    return vn
 
+# Initialize Vanna for trades
+vn_trades = initialize_vanna("VANNA_MODEL_TRADES", "VANNA_API_KEY_TRADES", 'D:/tronique-new/database/tron')
 
-@app.route("/api/v1/generate_questions", methods=["GET"])
-def generate_questions():
+# Initialize Vanna for forum
+vn_forum = initialize_vanna("VANNA_MODEL_FORUM", "VANNA_API_KEY_FORUM", 'D:/tronique-new/database/TronForumData')
+
+@app.route("/api/v1/trades/generate_questions", methods=["GET"])
+def generate_trades_questions():
     return jsonify(
         {
             "type": "question_list",
-            "questions": vn.generate_questions(),
+            "questions": vn_trades.generate_questions(),
             "header": "Here are some questions you can ask:",
         }
     )
 
-@app.route("/api/v1/generate_sql", methods=["GET"])
-def generate_sql():
+
+@app.route("/api/v1/forum/generate_questions", methods=["GET"])
+def generate_forum_questions():
+    return jsonify(
+        {
+            "type": "question_list",
+            "questions": vn_forum.generate_questions(),
+            "header": "Here are some questions you can ask:",
+        }
+    )
+    
+
+@app.route("/api/v1/trades/generate_and_run_sql", methods=["GET"])
+def generate_and_run_trades_sql():
     question = request.args.get("question")
     if question is None:
         return jsonify({"type": "error", "error": "No question provided"})
-    sql = vn.generate_sql(question=question)
-    return jsonify({"type": "sql", "text": sql})
-
-
-@app.route("/api/v1/run_sql", methods=["POST"])
-def run_sql():
-    data = request.get_json()
-    sql = data.get("sql") if data else None
-    print("sql", sql)
-    if sql is None:
-        return jsonify({"type": "error", "error": "No SQL query provided", "sql": sql})
+    
     try:
-        df = vn.run_sql(sql=sql)
+        sql = vn_trades.generate_sql(question=question)
+        df = vn_trades.run_sql(sql=sql)
         return jsonify({"type": "df", "df": df.head(10).to_json(orient="records")})
     except Exception as e:
         return jsonify({"type": "error", "error": str(e)})
+    
 
-
-@app.route("/api/v1/download_csv", methods=["POST"])
-def download_csv():
-    data = request.get_json()
-    df_json = data.get("df")
-    if df_json is None:
-        return jsonify({"type": "error", "error": "No DataFrame provided"})
-    df = pd.read_json(df_json, orient="records")
-    csv = df.to_csv(index=False)
-    return Response(
-        csv,
-        mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=data.csv"},
-    )
-
-
-@app.route("/api/v1/get_training_data", methods=["GET"])
-def get_training_data():
-    df = vn.get_training_data()
-
-    print(df, file=sys.stderr)
-    return jsonify(
-        {
-            "type": "df",
-            "id": "training_data",
-            "df": df.head(25).to_json(orient="records"),
-        }
-    )
-
-
-@app.route("/api/v1/remove_training_data", methods=["POST"])
-def remove_training_data():
-    data = request.get_json()
-    new_id = data.get("id")
-    if new_id is None:
-        return jsonify({"type": "error", "error": "No id provided"})
-    # Placeholder logic, replace with actual call to remove training data
-    if vn.remove_training_data(id=new_id):
-        return jsonify({"success": True})
-    else:
-        return jsonify({"type": "error", "error": "Couldn't remove training data"})
-
-
-@app.route("/api/v1/train", methods=["POST"])
-def add_training_data():
-    data = request.get_json()
-    question = data.get("question")
-    sql = data.get("sql")
-    ddl = data.get("ddl")
-    documentation = data.get("documentation")
+@app.route("/api/v1/forum/generate_and_run_sql", methods=["GET"])
+def generate_and_run_forum_sql():
+    question = request.args.get("question")
+    if question is None:
+        return jsonify({"type": "error", "error": "No question provided"})
+    
     try:
-        new_id = vn.train(
-            question=question, sql=sql, ddl=ddl, documentation=documentation
-        )
-        return jsonify({"id": new_id})
+        sql = vn_forum.generate_sql(question=question)
+        df = vn_forum.run_sql(sql=sql)
+        return jsonify({"type": "df", "df": df.head(10).to_json(orient="records")})
     except Exception as e:
         return jsonify({"type": "error", "error": str(e)})
+    
+
+@app.route('/api/v1/trades/generate_plotly_figure', methods=['GET'])
+def generate_trades_plotly_figure():
+    question = request.args.get('question')
+    sql = vn_trades.generate_sql(question=question)
+    df = vn_trades.run_sql(sql=sql)
+
+    try:
+        code = vn_trades.generate_plotly_code(question=question, sql=sql, df_metadata=f"Running df.dtypes gives:\n {df.dtypes}")
+        fig = vn_trades.get_plotly_figure(plotly_code=code, df=df, dark_mode=False)
+        fig_json = fig.to_json()
+
+        return jsonify(
+            {
+                "type": "fig", 
+                "question": question,
+                "fig": fig_json,
+            })
+    except Exception as e:
+        # Print the stack trace
+        import traceback
+        traceback.print_exc()
+
+        return jsonify({"type": "error", "error": str(e)})
+    
+
+@app.route('/api/v1/forum/generate_plotly_figure', methods=['GET'])
+def generate_forum_plotly_figure():
+    question = request.args.get('question')
+    sql = vn_forum.generate_sql(question=question)
+    df = vn_forum.run_sql(sql=sql)
+
+    try:
+        code = vn_forum.generate_plotly_code(question=question, sql=sql, df_metadata=f"Running df.dtypes gives:\n {df.dtypes}")
+        fig = vn_forum.get_plotly_figure(plotly_code=code, df=df, dark_mode=False)
+        fig_json = fig.to_json()
+
+        return jsonify(
+            {
+                "type": "fig", 
+                "question": question,
+                "fig": fig_json,
+            })
+    except Exception as e:
+        # Print the stack trace
+        import traceback
+        traceback.print_exc()
+
+        return jsonify({"type": "error", "error": str(e)})
+    
+
+# @app.route("/api/hello", methods=["GET"])
+# def generate_forum_plotly_figure():
+#     return jsonify("Hello")
 
 
 if __name__ == "__main__":

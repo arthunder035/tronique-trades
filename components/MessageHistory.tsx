@@ -9,12 +9,15 @@ import { useRoot } from "@/context/ContextProvider";
 import ChatButtons from "./ChatButtons";
 import useChatScroll from "./ChatScroll";
 import CodeContainer from "./CodeContainer";
-import "../styles/chatscreen.css"
-import icon from "../public/icon.svg"
-
+import "../styles/chatscreen.css";
+import icon from "../public/icon.svg";
+// import Plot from "react-plotly.js";
+import dynamic from "next/dynamic";
+const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 type MessageHistoryProps = {
   runSQL: (sql: string) => Promise<RUNResponse>;
+  plotlyResult: any;
 };
 type ModesState = {
   [key: number]: string;
@@ -104,11 +107,18 @@ const MessageHistory = (props: MessageHistoryProps) => {
         return <p className="font-bold text-xs">Relevant data not found!</p>;
       } else {
         return (
-          <div>
-            <p>this is your response.</p>
-            <Table data={data} />
-            
-          </div>
+          <>
+            <div>
+              <Table data={data} />
+            </div>
+            <div>
+              <Plot
+                data={props.plotlyResult?.data}
+                layout={props.plotlyResult?.layout}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </div>
+          </>
         );
       }
     } else if (val.type === MESSAGE_TYPES.sql) {
@@ -122,7 +132,10 @@ const MessageHistory = (props: MessageHistoryProps) => {
   };
 
   return (
-    <div ref={chatRef} className="m-0 p-0 text-white w-full h-[85%] overflow-y-scroll">
+    <div
+      ref={chatRef}
+      className="m-0 p-0 text-white w-full h-[85%] overflow-y-scroll"
+    >
       {messageHistory?.map((val, ix) => (
         <div key={val?.messageId} className="mx-8 my-8 overflow-hidden">
           {val?.ai && (

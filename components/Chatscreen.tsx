@@ -14,22 +14,25 @@ import {
   TMessage,
   TQuestions,
   RUNResponse,
+  SQLAndRunResponse,
 } from "@/helpers/types";
 import { AxiosResponse } from "axios";
 import { MESSAGE_TYPES } from "@/helpers/enums";
 import { useRoot } from "@/context/ContextProvider";
-import "../styles/chatscreen.css"
+import "../styles/chatscreen.css";
 
 type ChatscreenProps = {
   generateQuestions: () => Promise<AxiosResponse<any, any>>;
-  generateSQL: (question: string) => Promise<SQLResponse>;
-  runSQL: (sql: string) => Promise<RUNResponse>;
+  generateSQL: (question: string) => Promise<any>;
+  runSQL: (sql: string) => Promise<any>;
+  generatePlotlyFigureForum: (question: string) => Promise<any>;
 };
 
 const Chatscreen: React.FC<ChatscreenProps> = ({
   generateQuestions,
   generateSQL,
   runSQL,
+  generatePlotlyFigureForum,
 }: Readonly<ChatscreenProps>) => {
   const [message, setMessage] = useState<string>("");
 
@@ -38,7 +41,7 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
   const [disabled, setDisabled] = useState(message.length === 0);
   const [loading, setLoading] = useState(true);
   const [generatedQuestions, setGeneratedQuestions] = useState({});
-  
+  const [plotlyResult, setPlotlyResult] = useState<any>();
 
   useLayoutEffect(() => {
     let isMounted = true; // Flag to track component's mounting status
@@ -49,11 +52,11 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
         // Only update state if component is still mounted
         console.log({ questions });
         setGeneratedQuestions(questions);
-        setLoading(false);
       }
     }
+    setLoading(false);
 
-    fetchData();
+    // fetchData();
 
     return () => {
       isMounted = false; // Set flag to false when the component unmounts
@@ -69,6 +72,58 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
       setDisabled(true);
     }
   };
+
+  // const handleSend = useCallback(async () => {
+  //   if (message.length === 0) return; // Guard clause to prevent sending empty messages
+
+  //   try {
+  //     const newMessageId = uuidv4();
+
+  //     const msg = message.slice();
+  //     setMessage("");
+  //     setDisabled(true);
+  //     let newMessage: TMessage = {
+  //       ai: "",
+  //       user: msg,
+  //       messageId: newMessageId,
+  //       type: MESSAGE_TYPES.user,
+  //     };
+
+  //     handleChangeMessageHistory(newMessage);
+
+  //     const aiRes = await generateSQL(msg);
+
+  //     if (
+  //       aiRes?.text === "No SELECT statement could be found in the SQL code"
+  //     ) {
+  //       newMessage = {
+  //         ai: aiRes?.text,
+  //         user: "",
+  //         messageId: uuidv4(),
+  //         type: MESSAGE_TYPES.error,
+  //       };
+  //     } else if ("error" in aiRes) {
+  //       newMessage = {
+  //         ai: aiRes?.error as string,
+  //         user: "",
+  //         messageId: uuidv4(),
+  //         type: MESSAGE_TYPES.error,
+  //       };
+  //     } else {
+  //       newMessage = {
+  //         ai: aiRes?.text,
+  //         user: "",
+  //         messageId: uuidv4(),
+  //         type: MESSAGE_TYPES.sql,
+  //       };
+  //     }
+
+  //     handleChangeMessageHistory(newMessage);
+  //   } catch (error: any) {
+  //     console.error("Failed to handle send:", error);
+  //     // Handle the error state appropriately
+  //   }
+  // }, [message, handleChangeMessageHistory, generateSQL]);
 
   const handleSend = useCallback(async () => {
     if (message.length === 0) return; // Guard clause to prevent sending empty messages
@@ -89,17 +144,9 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
       handleChangeMessageHistory(newMessage);
 
       const aiRes = await generateSQL(msg);
+      const { df } = aiRes;
 
-      if (
-        aiRes?.text === "No SELECT statement could be found in the SQL code"
-      ) {
-        newMessage = {
-          ai: aiRes?.text,
-          user: "",
-          messageId: uuidv4(),
-          type: MESSAGE_TYPES.error,
-        };
-      } else if ("error" in aiRes) {
+      if ("error" in aiRes) {
         newMessage = {
           ai: aiRes?.error as string,
           user: "",
@@ -108,19 +155,33 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
         };
       } else {
         newMessage = {
-          ai: aiRes?.text,
+          ai: df,
           user: "",
           messageId: uuidv4(),
-          type: MESSAGE_TYPES.sql,
+          type: MESSAGE_TYPES.df,
         };
       }
 
       handleChangeMessageHistory(newMessage);
+
+      const plotlyRes = await generatePlotlyFigureForum(msg);
+      const plotData = JSON.parse(plotlyRes.fig);
+
+      setPlotlyResult(plotData);
+      console.log("Vis Result", plotlyRes);
     } catch (error: any) {
       console.error("Failed to handle send:", error);
       // Handle the error state appropriately
     }
-  }, [message, handleChangeMessageHistory, generateSQL]); // Dependencies
+
+    // router.push('/')
+  }, [
+    message,
+    handleChangeMessageHistory,
+    generateSQL,
+    // generateAndRunSQLForum,
+    // generatePlotlyFigureForum,
+  ]);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === "Enter" && !disabled) {
@@ -138,19 +199,18 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
           loading={loading}
         />
       ) : (
-        <MessageHistory runSQL={runSQL} />
+        <MessageHistory runSQL={runSQL} plotlyResult={plotlyResult}/>
       )}
 
-      <div className={`z-10 fixed bottom-0 pl-10 pr-4 py-2 mt-2 rounded-full m-8 bg-[#231E1E]
-        ${
-          showSideBar ? "w-[73vw]" : "w-[85%]"
-        }`}
+      <div
+        className={`z-10 fixed bottom-0 pl-10 pr-4 py-2 mt-2 rounded-full m-8 bg-[#231E1E]
+        ${showSideBar ? "w-[73vw]" : "w-[85%]"}`}
       >
         <div className={`flex items-center`}>
           <input
             type="text"
             className={`input m-2 w-full bg-transparent border-none outline-none ${
-              message.trim() ? 'text-white' : 'text-[#848484]'
+              message.trim() ? "text-white" : "text-[#848484]"
             }`}
             placeholder="Enter a prompt here"
             value={message}
@@ -161,9 +221,7 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
           <button
             disabled={disabled}
             className={`flex items-center justify-center h-9 w-10 border rounded-full bg-white ${
-              disabled
-                ? "border-white bg-white"
-                : "border-white bg-white"
+              disabled ? "border-white bg-white" : "border-white bg-white"
             }`}
           >
             <BiSend size={20} onClick={handleSend} className="text-[#DE082D]" />
