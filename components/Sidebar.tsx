@@ -39,13 +39,13 @@ export default function Sidebar() {
 
     switch (option) {
       case "Forum Data":
-        window.open("https://example.com/forum-data", "_blank");
+        window.open("https://forum.tronique.info", "_blank");
         break;
       case "DexTrade Data":
-        window.open("https://example.com/dextrade-data", "_blank");
+        window.open("https://trades.tronique.info", "_blank");
         break;
       case "Documentation Data":
-        window.open("https://example.com/documentation-data", "_blank");
+        window.open("https://trades.tronique.info", "_blank");
         break;
       default:
         break;
