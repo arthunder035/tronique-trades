@@ -42,7 +42,7 @@ const initState: Array<TMessage> = [
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
   const [messageHistory, setMessageHistory] =
     useState<Array<TMessage>>(initState);
-  const [showSideBar, setShowSideBar] = useState(true);
+  const [showSideBar, setShowSideBar] = useState(false);
   const [error, setError] = useState("");
 
   const handleShowSideBar = (val: boolean) => {

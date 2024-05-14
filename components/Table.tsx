@@ -20,7 +20,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
 
     const headers = Object.keys(data[0]);
     return (
-      <thead className="bg-black">
+      <thead className="bg-black text-sm">
         <tr>
           {headers?.map((header) => (
             <th
@@ -39,7 +39,7 @@ const Table: React.FC<TableProps> = ({ data }) => {
   // Render table rows
   const renderTableRows = (data: DataItem[]) => {
     return (
-      <tbody className="bg-white divide-y divide-gray-200">
+      <tbody className="bg-white divide-y divide-gray-200 text-sm">
         {data?.map((item) => (
           <tr key={uuidV4()}>
             {Object.values(item).map((value) => (
@@ -58,10 +58,10 @@ const Table: React.FC<TableProps> = ({ data }) => {
 
   return (
     <div className="flex flex-col">
-      <div className="-my-2 overflow-x-scroll output-table sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
+     <div className="-my-2 overflow-x-auto output-table">
+        <div className="pt-2 align-left inline-block min-w-full">
+          <div className="">
+            <table className="w-auto divide-y divide-gray-200">
               {renderTableHeaders(data)}
               {renderTableRows(data)}
             </table>

@@ -51,20 +51,21 @@ const Homescreen = (props: HomescreenProps) => {
   };
 
   return (
-    <div className="m-auto flex flex-col w-full h-[100vh] items-center justify-center">
+    <div className="m-auto flex flex-col w-full h-[85vh] items-center justify-center">
       <div className="flex w-[80%] h-auto flex-col items-start m-3">
         <h3 className="hello-text">Hello,</h3>
         <p className="text-[white] paragraph">How can I help you today?</p>
       </div>
-      <div className="flex flex-row justify-start items-start max-h-[40vh] w-[80%]">
+      <div className="flex flex-wrap justify-start w-[80%]">
         {!loading &&
           fixedQuestions.map((ques: string) => {
             return (
               <div
                 key={uuidv4()}
-                className="question-div border border-1 rounded-md py-3 px-4 m-3 text-white flex flex-col justify-between items-center max-h-[140px]"
+                className="question-div border border-1 rounded-md py-3 px-4 m-3 text-white"
+                style={{ flex: "1 0 40%", maxWidth: "calc(50% - 2rem)", boxSizing: "border-box" }}
               >
-                <p className="text-[1vw]">{ques}</p>
+                <p className= "questiontext" style={{ margin: 0, wordWrap: "break-word"}}>{ques}</p>
                 {/* <button
                   className="chat-button"
                   key={uuidv4()}
@@ -75,7 +76,7 @@ const Homescreen = (props: HomescreenProps) => {
               </div>
             );
           })}
-        {loading && <div className="text-white">Loading....</div>}
+        {loading && <div className="text-white ml-[10px] text-sm">Loading....</div>}
       </div>
     </div>
   );

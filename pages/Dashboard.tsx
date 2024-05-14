@@ -2,10 +2,11 @@
 import React from "react";
 import Sidebar from "@/components/Sidebar";
 import Chatscreen from "@/components/Chatscreen";
-// import Chatscreen from "@/components/changes";
 import { AxiosResponse } from "axios";
 import { RUNResponse, SQLResponse } from "@/helpers/types";
 import ContextProvider from "@/context/ContextProvider";
+import Navbar from "@/components/navbar"
+import { Toaster } from "react-hot-toast";
 
 type FunctionProps = {
   generateQuestions: () => Promise<AxiosResponse<any, any>>;
@@ -19,8 +20,21 @@ const Dashboard: React.FC<FunctionProps> = (props: FunctionProps) => {
 
   return (
     <ContextProvider>
-      <main className="flex min-h-screen text-lg">
+<main className="flex flex-col sm:flex-row min-h-screen text-lg">
+        <Navbar />
         <Sidebar />
+        <Toaster
+        toastOptions={{
+          style: {
+            fontSize: '14px',
+            backgroundColor: '#d2d0d0',
+            color: '#000',
+            boxShadow: 'none',
+            borderRadius: '50px',
+            padding: '3px 5px',
+          },
+        }}
+      />
         <Chatscreen
           generateQuestions={generateQuestions}
           generateSQL={generateSQL}

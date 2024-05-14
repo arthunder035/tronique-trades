@@ -203,13 +203,13 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
       )}
 
       <div
-        className={`z-10 fixed bottom-0 pl-10 pr-4 py-2 mt-2 rounded-full m-8 bg-[#231E1E]
-        ${showSideBar ? "w-[73vw]" : "w-[85%]"}`}
+        className={`ml-[10vw] z-10 fixed bottom-0 py-0 pl-8 pr-3 sm:pl-10 sm:pr-4 sm:py-2 my-6 rounded-full sm:ml-[4vw] lg:ml-[8vw] bg-[#231E1E] 
+        ${showSideBar ? "w-[45%] md:w-[55%] lg:w-[65%]" : "w-[80%] sm:w-[70%] md:w-[80%]"}`}
       >
-        <div className={`flex items-center`}>
+        <div className={`flex items-center w-full ml-auto`}>
           <input
             type="text"
-            className={`input m-2 w-full bg-transparent border-none outline-none ${
+            className={`input m-2 w-full bg-transparent text-sm sm:text-base border-none outline-none ${
               message.trim() ? "text-white" : "text-[#848484]"
             }`}
             placeholder="Enter a prompt here"
@@ -220,7 +220,7 @@ const Chatscreen: React.FC<ChatscreenProps> = ({
 
           <button
             disabled={disabled}
-            className={`flex items-center justify-center h-9 w-10 border rounded-full bg-white ${
+            className={`flex items-center justify-center h-7 w-8 sm:h-9 sm:w-10 border rounded-full bg-white ${
               disabled ? "border-white bg-white" : "border-white bg-white"
             }`}
           >
